@@ -1,0 +1,33 @@
+= Dreamhost Personal Backup Gem
+
+THIS IS A WORK IN PROGRESS. FEATURES MAY NOT WORK AND DOCUMENTATION MAY NOT BE ACCURATE.
+PLEASE DO NOT USE FOR BACKUPS.
+
+Provides functionality to perform personal backups to Dreamhost personal backup servers on Linux or OSX.
+
+Dreamhost provides a 'personal backup' that allows you to (surprisingly) back up your personal files to
+special Dreamhost backup servers. These backups are designed to be actual backups and so there are no backups
+kept of these backups on the Dreamhost side. It's just a nice place to store backups of your personal files.
+
+This gem contains functionality to schedule backups in an easy to configure manner. Currently you must set
+up your own schedule to execute this gem. You can configure via a YAML file to determine your backup targets.
+
+This gem uses rsync to perform the backups and keeps a 1-to-1 copy of the files on your host (i.e. 'target') machine
+on the Dreamhost personal backup server.
+
+=== Configuration
+
+This gem can be called either by passing a configuration YAML filepath or by setting up a configuration file in a
+default location. The default location that this gem will reference for a configuration file is
+'~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist and no config file is passed to the gem
+then an error will be raised.
+
+=== Usage
+
+The gem accepts only one parameter: a config file path.
+
+Usage:
+    DreamhostPersonalBackup('path/to/config_file')
+
+This will kick off the backup process using the parameters provided. A return code will be provided indicating
+success or failure.

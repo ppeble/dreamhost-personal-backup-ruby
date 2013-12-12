@@ -1,0 +1,2 @@
+require 'dreamhost-personal-backup'
+DreamhostPersonalBackup.perform_backup(ARGV[0])

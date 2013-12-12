@@ -1,0 +1,9 @@
+User: testuser
+Host: testhost.com
+
+LogFile: ~/logs/backup.log
+
+Targets:
+  Music: ~/music
+  Movies: ~/movies
+  Photos: ~/photos

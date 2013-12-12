@@ -1,0 +1,8 @@
+User: testuser
+Host: testhost.com
+LogFile: ~/logs/backup.log
+InvalidParameter: ThisShouldNotBeSet!
+Targets:
+  Music: ~/music
+  Movies: ~/movies
+  Photos: ~/photos
