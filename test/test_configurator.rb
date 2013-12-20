@@ -5,7 +5,9 @@ require 'backup/configurator'
 class ConfiguratorTests < Test::Unit::TestCase
 
   def test_raise_error_if_config_file_does_not_exist
-    assert_raise(DreamhostPersonalBackup::ConfigFileNotFound) { DreamhostPersonalBackup::Configurator.process_config_file }
+    assert_raise(DreamhostPersonalBackup::ConfigFileNotFound) {
+      DreamhostPersonalBackup::Configurator.process_config_file("/file/does/not/exist")
+    }
   end
 
   def test_config_file_is_processed_without_errors
