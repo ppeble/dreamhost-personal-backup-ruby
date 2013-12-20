@@ -1,10 +1,14 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    metaclass (0.0.1)
+    mocha (0.14.0)
+      metaclass (~> 0.0.1)
     rsync (1.0.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  mocha
   rsync
