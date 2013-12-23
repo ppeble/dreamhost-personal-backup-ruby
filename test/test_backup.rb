@@ -31,7 +31,7 @@ class BackupTests < Test::Unit::TestCase
   private
 
   def set_expected_rsync_result_as(rsync_return_code)
-    rsync_return_code = stub(success?: rsync_return_code)
+    rsync_return_code = stub(:success? => rsync_return_code)
 
     Rsync.expects(:run).with(SOURCE_DIR_PARAMETER,
                              DEST_DIR_PARAMETER,

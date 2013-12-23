@@ -13,6 +13,7 @@ GEM
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
+    rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rsync (1.0.8)
@@ -32,5 +33,6 @@ PLATFORMS
 DEPENDENCIES
   coveralls
   mocha
+  rake
   rsync
   simplecov
