@@ -18,6 +18,11 @@ up your own schedule to execute this gem. You can configure via a YAML file to d
 
 This gem uses rsync to perform the backups.
 
+=== Code Status
+
+* {<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup]
+* {<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
+
 === rsync details
 
 The following parameters are used with rsync:
