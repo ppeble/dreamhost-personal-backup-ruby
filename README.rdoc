@@ -17,7 +17,7 @@ Currently you must set up your own schedule to execute this gem.
 
 This gem uses rsync to perform the backups.
 
-Dreamhost Personal Backup Wiki: [http://wiki.dreamhost.com/Personal_Backup]
+Dreamhost Personal Backup Wiki: http://wiki.dreamhost.com/Personal_Backup
 
 === Code Status
 
