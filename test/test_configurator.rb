@@ -45,4 +45,16 @@ class ConfiguratorTests < Test::Unit::TestCase
 
     assert_equal DreamhostPersonalBackup::Configurator::DEFAULT_LOG_SIZE, config_parameters[:logrotationsizeinbytes]
   end
+
+  def test_default_log_file_keep_count_set_if_not_present_in_config_file
+    config_parameters = DreamhostPersonalBackup::Configurator.process_config_file('test/test_files/test_config_file_missing_optional_params.yml')
+
+    assert_equal DreamhostPersonalBackup::Configurator::DEFAULT_LOG_KEEP_COUNT, config_parameters[:logkeepcount]
+  end
+
+  def test_logger_created_even_if_no_parameters_set
+    config_parameters = DreamhostPersonalBackup::Configurator.process_config_file('test/test_files/test_config_file_missing_optional_params.yml')
+
+    assert_not_nil config_parameters[:logger]
+  end
 end

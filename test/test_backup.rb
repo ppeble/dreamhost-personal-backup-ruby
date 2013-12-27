@@ -1,10 +1,11 @@
 require File.expand_path(File.dirname(__FILE__)) + '/test_helper'
 
 require 'backup/backup'
+require 'logger'
 
 class BackupTests < Test::Unit::TestCase
 
-  CONFIG_PARAMETERS = {:user => "testuser", :host => "localhost"}
+  CONFIG_PARAMETERS = {:user => "testuser", :host => "localhost", :logger => Logger.new(STDOUT)}
 
   SOURCE_DIR_PARAMETER = "/path/to/source"
   DEST_DIR_PARAMETER = "#{CONFIG_PARAMETERS[:user]}@#{CONFIG_PARAMETERS[:host]}:~/"
@@ -17,21 +18,25 @@ class BackupTests < Test::Unit::TestCase
   def test_backup_fails_if_user_is_missing
     parameters_with_host_only = {:host => "localhost"}
 
-    assert_equal false,
-                 DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_host_only)
+    assert_raise(DreamhostPersonalBackup::MissingConfigParameter) {
+      DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_host_only)
+    }
   end
 
   def test_backup_fails_if_host_is_missing
     parameters_with_user_only = {:user => "testuser"}
 
-    assert_equal false,
-                 DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_user_only)
+    assert_raise(DreamhostPersonalBackup::MissingConfigParameter) {
+      DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_user_only)
+    }
   end
 
   private
 
   def set_expected_rsync_result_as(rsync_return_code)
     rsync_return_code = stub(:success? => rsync_return_code)
+
+    Logger.any_instance.expects(:info).at_least(1).returns(nil) # Suppress logging messages for tests
 
     Rsync.expects(:run).with(SOURCE_DIR_PARAMETER,
                              DEST_DIR_PARAMETER,
