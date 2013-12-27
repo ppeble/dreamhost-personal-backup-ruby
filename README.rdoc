@@ -3,37 +3,39 @@
 THIS IS A WORK IN PROGRESS. FEATURES MAY NOT WORK AND DOCUMENTATION MAY NOT BE ACCURATE.
 PLEASE DO NOT USE FOR BACKUPS.
 
-Provides functionality to perform personal backups (on Linux or OSX) to Dreamhost personal backup servers.
+Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server.
 
 Dreamhost provides a 'personal backup' that allows you to back up your personal files to
 special Dreamhost backup servers. These backups are designed to be actual backups and so there are no copies
 kept of these files on the Dreamhost side. I use it as an offsite mirror of my personal files (documents,
 music, photos, etc).
 
-The gem's backup is a mirror of what is on your home machine. It does not have versioning. If you want to restore from
+This backup is a mirror of what is on your home machine. It does not have versioning. If you want to restore from
 backup then you simply copy what is on the Dreamhost server to your home machine.
 
-This gem contains functionality to schedule backups in an easy to configure manner. Currently you must set
-up your own schedule to execute this gem. You can configure via a YAML file to determine your backup targets.
+Currently you must set up your own schedule to execute this gem.
 
 This gem uses rsync to perform the backups.
 
+Dreamhost Personal Backup Wiki: [http://wiki.dreamhost.com/Personal_Backup]
+
 === Code Status
 
-* {<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup]
-* {<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
+{<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup]
+{<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
 
-=== rsync details
+=== Usage
 
-The following parameters are used with rsync:
-    * Archive (-a) - ensures that all symbolic links, devices, attributes, permissions, ownerships, etc are preserved
-    * Verbose (-v) - Shows verbose logging
-    * Compress (-z) - Compresses files during transfer
-    * Partial/ Progress (-P) - Keeps partially tranferred files and shows progress in the logs
-    * Deletes (--delete) - Deletes files on the Dreamhost side that do not exist on the sending side
+The gem accepts only one parameter (which is optional): a config file path.
 
-In practice what this means is that it keeps a mirror of what is on the sending side. Deleting a file on the home host
-will remove it from the backup server.
+Usage:
+    DreamhostPersonalBackup('path/to/config_file')
+
+This will kick off the backup process using the parameters provided. A return code will be provided indicating
+success or failure.
+
+Calling without a config file parameter will cause the gem to look for a config file to load from
+'~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist then an error will be returned.
 
 === Configuration
 
@@ -48,16 +50,18 @@ The following parameters are present:
     * host (required)
     * ADD MORE HERE
 
+==== cron
 
-=== Usage
+Tasks with this gem can be scheduled to execute at regular intervals. Example:
 
-The gem accepts only one parameter (which is optional): a config file path.
+=== rsync details
 
-Usage:
-    DreamhostPersonalBackup('path/to/config_file')
+ The following parameters are used with rsync:
+     * Archive (-a) - ensures that all symbolic links, devices, attributes, permissions, ownerships, etc are preserved
+     * Verbose (-v) - Shows verbose logging
+     * Compress (-z) - Compresses files during transfer
+     * Partial/ Progress (-P) - Keeps partially tranferred files and shows progress in the logs
+     * Deletes (--delete) - Deletes files on the Dreamhost side that do not exist on the sending side
 
-This will kick off the backup process using the parameters provided. A return code will be provided indicating
-success or failure.
-
-Calling without a config file parameter will cause the gem to look for a config file to load from
-'~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist then an error will be returned.
+In practice what this means is that it keeps a mirror of what is on the sending side. Deleting a file on the home host
+will remove it from the backup server.
