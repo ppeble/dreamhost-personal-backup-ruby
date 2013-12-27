@@ -3,7 +3,6 @@ Host: testhost.com
 
 NotifyEmail: TestEmail@email.com
 
-LogFile: ~/logs/backup.log
 LogRotationSizeInBytes: 105000000
 
 Targets:

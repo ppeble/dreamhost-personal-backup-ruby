@@ -20,7 +20,6 @@ class ConfiguratorTests < Test::Unit::TestCase
 
     assert_equal "testuser", config_parameters[:user]
     assert_equal "testhost.com", config_parameters[:host]
-    assert_equal "~/logs/backup.log", config_parameters[:logfile]
     assert_equal "TestEmail@email.com", config_parameters[:notifyemail]
 
     assert config_parameters[:targets].is_a?(Hash)
