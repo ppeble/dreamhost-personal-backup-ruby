@@ -4,8 +4,8 @@ require 'backup/backup'
 module DreamhostPersonalBackup
   VERSION = '0.1'
 
-  def self.perform_backup(parameters = {})
-    config_parameters = DreamhostPersonalBackup::Configurator.process_config_file(parameters[:config_file])
+  def self.perform_backup(config_file)
+    config_parameters = DreamhostPersonalBackup::Configurator.process_config_file(config_file)
 
     logger = config_parameters[:logger]
 
