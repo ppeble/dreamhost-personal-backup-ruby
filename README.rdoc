@@ -1,7 +1,7 @@
 = Dreamhost Personal Backup Gem
 
 THIS IS A WORK IN PROGRESS. FEATURES MAY NOT WORK AND DOCUMENTATION MAY NOT BE ACCURATE.
-PLEASE DO NOT USE FOR BACKUPS.
+PLEASE DO NOT USE YET FOR BACKUPS.
 
 Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server.
 
@@ -19,44 +19,75 @@ This gem uses rsync to perform the backups.
 
 Dreamhost Personal Backup Wiki: http://wiki.dreamhost.com/Personal_Backup
 
-=== Code Status
-
-{<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup]
-{<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
-
 === Usage
 
+Install the usual way:
+    gem install dreamhost-personal-backup
+
+You can then call it from the command line.
+    $ dreamhost_personal_backup
+
 The gem accepts only one parameter (which is optional): a config file path.
+    $ dreamhost_personal_backup '/path/to/you/config/file'
 
-Usage:
-    DreamhostPersonalBackup('path/to/config_file')
-
-This will kick off the backup process using the parameters provided. A return code will be provided indicating
-success or failure.
-
-Calling without a config file parameter will cause the gem to look for a config file to load from
+Calling without a config file parameter will cause the gem to look for a config file at
 '~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist then an error will be returned.
+
+==== Dreamhost Setup
+
+This gem currently assumes that you have activated your Dreamhost Backup User via the Dreamhost Panel and that you
+have set up SSH trust with your backup server.
+
+Dreamhost Backup Servers use rssh, which is a restricted shell. As such setting up SSH via their instructions is the
+only way to truly automate backups. See their wiki (http://wiki.dreamhost.com/Personal_Backup) for step-by-step
+instructions on how to set up SSH trust between your host and the backup server.
 
 === Configuration
 
 This gem can be called either by passing a configuration YAML filepath or by setting up a configuration file in a
 default location. The default location that this gem will reference for a configuration file is
-'~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist and no config file is passed to the gem
-then an error will be raised.
+'~/.dreamhost_personal_backup/default_config.yml'. If this file does not exist and no config file is passed then an
+error will be returned.
 
-The following parameters are present:
+The following parameters are available:
 
     * user (required)
     * host (required)
-    * ADD MORE HERE
+    * targets (required)
+    * logfile (optional, default: STDOUT)
+    * logrotationsizeinbytes (optional, default: 105000000)
+    * logkeepcount (optional, default: 3)
+    * notifyemail (optional, default: nil)
+
+Here is an example config file:
+
+    user: <username>
+    host: <host>
+
+    logfile: ~/logs/backup.log
+    logrotationsizeinbytes: 500000000
+    logkeepcount: 5
+
+    notifyemail: target_address@email.com
+
+    targets:
+      music: /media/drive/Music
+      documents: ~/Documents
+      writing: ~/Writing
+      scripts: ~/scripts
+      gmail-archive: ~/gmail-archive
+      patches: ~/Code/patches
 
 ==== cron
 
 Tasks with this gem can be scheduled to execute at regular intervals. Example:
 
+    # Run the backup script every 3 hours every day
+    0 0,3,6,9,12,15,18,22 * * * dreamhost_personal_backup
+
 === rsync details
 
- The following parameters are used with rsync:
+The following parameters are used with rsync:
      * Archive (-a) - ensures that all symbolic links, devices, attributes, permissions, ownerships, etc are preserved
      * Verbose (-v) - Shows verbose logging
      * Compress (-z) - Compresses files during transfer
@@ -65,3 +96,11 @@ Tasks with this gem can be scheduled to execute at regular intervals. Example:
 
 In practice what this means is that it keeps a mirror of what is on the sending side. Deleting a file on the home host
 will remove it from the backup server.
+
+=== Credits and code
+
+* Source: https://github.com/ptrimble/dreamhost-personal-backup
+* Build status: http://travis-ci.org/#!/ptrimble/dreamhost-personal-backup {<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup]
+* Code Coverage: https://coveralls.io/r/ptrimble/dreamhost-personal-backup {<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
+
+
