@@ -3,9 +3,9 @@
 THIS IS A WORK IN PROGRESS. FEATURES MAY NOT WORK AND DOCUMENTATION MAY NOT BE ACCURATE.
 PLEASE DO NOT USE YET FOR BACKUPS.
 
-Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server.
-
 {<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup] {<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
+
+Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server.
 
 Dreamhost provides a 'personal backup' that allows you to back up your personal files to
 special Dreamhost backup servers. These backups are designed to be actual backups and so there are no copies
