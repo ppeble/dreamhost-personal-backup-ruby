@@ -8,9 +8,7 @@ module DreamhostPersonalBackup
     RSYNC_COMMAND_ARGS = ['-e ssh', '-avzP', '--delete']
 
     def self.run_for_target_directory(target_dir, config_parameters)
-      raise MissingConfigParameter if config_parameters[:user].nil?
-      raise MissingConfigParameter if config_parameters[:host].nil?
-      raise MissingConfigParameter if config_parameters[:logger].nil?
+      check_for_required_parameters(config_parameters)
 
       user = config_parameters[:user]
       host = config_parameters[:host]
@@ -24,6 +22,14 @@ module DreamhostPersonalBackup
 
       result.success?
     end
+
+    private
+
+      def self.check_for_required_parameters(config_parameters)
+        raise MissingConfigParameter if config_parameters[:user].nil?
+        raise MissingConfigParameter if config_parameters[:host].nil?
+        raise MissingConfigParameter if config_parameters[:logger].nil?
+      end
   end
 
 end
