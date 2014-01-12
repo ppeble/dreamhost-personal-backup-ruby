@@ -21,8 +21,8 @@ module DreamhostPersonalBackup
       raise DreamhostPersonalBackup::ConfigFileNotFound unless File.file?(config_file)
 
       config_parameters = Hash.new
-      config_file = YAML.load_file(config_file)
 
+      config_file = YAML.load_file(config_file)
       config_file.each do |config_key, config_value|
         config_parameter = config_key.downcase.to_sym
 
