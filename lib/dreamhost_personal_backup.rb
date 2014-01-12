@@ -2,7 +2,7 @@ require 'backup/configurator'
 require 'backup/backup'
 
 module DreamhostPersonalBackup
-  VERSION = '0.1'
+  VERSION = '0.1.0'
 
   def self.perform_backup(config_file)
     config_parameters = DreamhostPersonalBackup::Configurator.process_config_file(config_file)
