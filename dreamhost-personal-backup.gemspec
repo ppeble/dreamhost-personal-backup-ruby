@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Phil Trimble"]
-  s.date = "2014-01-13"
+  s.date = "2014-01-15"
   s.description = "Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server."
   s.email = "philtrimble@gmail.com"
   s.executables = ["dreamhost_personal_backup"]
