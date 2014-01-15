@@ -1,0 +1,4 @@
+= Dreamhost Personal Backup gem CHANGELOG
+
+== 0.1.0
+ * Initial limited feature release. Includes basic rsync backup, logging, and check for an already-running backup.
