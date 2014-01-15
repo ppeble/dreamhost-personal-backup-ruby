@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "dreamhost-personal-backup"
-  s.version = "0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Phil Trimble"]
-  s.date = "2013-12-27"
+  s.date = "2014-01-13"
   s.description = "Provides functionality to perform personal backups (on Linux or OSX) to a Dreamhost personal backup server."
   s.email = "philtrimble@gmail.com"
   s.executables = ["dreamhost_personal_backup"]
@@ -20,14 +20,16 @@ Gem::Specification.new do |s|
   s.files = [
     ".coveralls.yml",
     ".travis.yml",
+    "CHANGELOG",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
     "README.rdoc",
     "bin/dreamhost_personal_backup",
-    "dreamhost_personal_backup.gemspec",
+    "dreamhost-personal-backup.gemspec",
     "lib/backup/backup.rb",
     "lib/backup/configurator.rb",
+    "lib/backup/status_manager.rb",
     "lib/dreamhost_personal_backup.rb",
     "rakefile.rb",
     "test/test_backup.rb",
@@ -36,7 +38,8 @@ Gem::Specification.new do |s|
     "test/test_files/test_config_file_missing_optional_params.yml",
     "test/test_files/test_invalid_parameters.yml",
     "test/test_files/test_standard_config_file.yml",
-    "test/test_helper.rb"
+    "test/test_helper.rb",
+    "test/test_status_manager.rb"
   ]
   s.homepage = "https://github.com/ptrimble/dreamhost-personal-backup"
   s.require_paths = ["lib"]
