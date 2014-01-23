@@ -5,7 +5,7 @@ require 'backup/configurator'
 class ConfiguratorTests < Test::Unit::TestCase
 
   def test_raise_error_if_config_file_does_not_exist
-    assert_raise(DreamhostPersonalBackup::ConfigFileNotFound) {
+    assert_raise(DreamhostPersonalBackup::ConfigFileNotFoundError) {
       DreamhostPersonalBackup::Configurator.process_config_file("/file/does/not/exist")
     }
   end
@@ -26,7 +26,7 @@ class ConfiguratorTests < Test::Unit::TestCase
   end
 
   def test_raise_error_if_invalid_parameter_is_passed
-    assert_raise(DreamhostPersonalBackup::InvalidConfigParameter) {
+    assert_raise(DreamhostPersonalBackup::InvalidConfigParameterError) {
       DreamhostPersonalBackup::Configurator.process_config_file('test/test_files/test_invalid_parameters.yml')
     }
   end

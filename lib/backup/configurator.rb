@@ -3,8 +3,8 @@ require 'logger'
 
 module DreamhostPersonalBackup
 
-  class ConfigFileNotFound < StandardError; end
-  class InvalidConfigParameter < StandardError; end
+  class ConfigFileNotFoundError < StandardError; end
+  class InvalidConfigParameterError < StandardError; end
 
   class Configurator
 
@@ -18,7 +18,7 @@ module DreamhostPersonalBackup
       config_file_path ||= DEFAULT_CONFIG_FILE
       config_file = File.expand_path(config_file_path)
 
-      raise DreamhostPersonalBackup::ConfigFileNotFound unless File.file?(config_file)
+      raise DreamhostPersonalBackup::ConfigFileNotFoundError unless File.file?(config_file)
 
       config_parameters = Hash.new
 
@@ -26,7 +26,7 @@ module DreamhostPersonalBackup
       config_file.each do |config_key, config_value|
         config_parameter = config_key.downcase.to_sym
 
-        raise DreamhostPersonalBackup::InvalidConfigParameter unless VALID_CONFIG_PARAMETERS.include?(config_parameter)
+        raise DreamhostPersonalBackup::InvalidConfigParameterError unless VALID_CONFIG_PARAMETERS.include?(config_parameter)
 
         config_parameters[config_parameter] = config_value
       end
