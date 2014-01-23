@@ -42,7 +42,7 @@ module DreamhostPersonalBackup
             logger.info "   #{change.summary} - #{change.filename}"
           end
         else
-          logger.info("  No changes took place!")
+          logger.info("   No changes took place!")
         end
 
         logger.info("  Backup completed successfully")

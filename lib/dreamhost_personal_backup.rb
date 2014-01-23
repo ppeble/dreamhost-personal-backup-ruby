@@ -14,13 +14,11 @@ module DreamhostPersonalBackup
 
     logger = config_parameters[:logger]
 
-    # Add some newlines for readability
     logger.info("")
-    logger.info("")
-
     logger.info("Starting new backup run at #{DateTime.now}")
 
     config_parameters[:targets].each_value do |target|
+      logger.info("")
       DreamhostPersonalBackup::Backup.run_for_target_directory(target, config_parameters)
     end
 
