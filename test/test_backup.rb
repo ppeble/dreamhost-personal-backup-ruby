@@ -23,7 +23,7 @@ class BackupTests < Test::Unit::TestCase
   def test_backup_fails_if_user_is_missing
     parameters_with_host_only = {:host => "localhost"}
 
-    assert_raise(DreamhostPersonalBackup::MissingConfigParameter) {
+    assert_raise(DreamhostPersonalBackup::MissingConfigParameterError) {
       DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_host_only)
     }
   end
@@ -31,7 +31,7 @@ class BackupTests < Test::Unit::TestCase
   def test_backup_fails_if_host_is_missing
     parameters_with_user_only = {:user => "testuser"}
 
-    assert_raise(DreamhostPersonalBackup::MissingConfigParameter) {
+    assert_raise(DreamhostPersonalBackup::MissingConfigParameterError) {
       DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, parameters_with_user_only)
     }
   end
