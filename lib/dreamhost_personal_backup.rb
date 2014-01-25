@@ -25,6 +25,7 @@ module DreamhostPersonalBackup
 
     DreamhostPersonalBackup::StatusManager.remove_pid_file
 
+    DreamhostPersonalBackup.logger.info("")
     DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
   end
 
