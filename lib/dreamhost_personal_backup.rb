@@ -20,7 +20,6 @@ module DreamhostPersonalBackup
     DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
 
     configurator.get_parameter(:targets).each_value do |target|
-      DreamhostPersonalBackup.logger.info("")
       DreamhostPersonalBackup::Backup.run_for_target_directory(target, configurator)
     end
 

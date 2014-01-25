@@ -16,6 +16,7 @@ module DreamhostPersonalBackup
 
       target_dir = File.expand_path(target_dir)
 
+      DreamhostPersonalBackup.logger.info("")
       DreamhostPersonalBackup.logger.info("  Running backup for target directory: #{target_dir}")
 
       rsync_result = Rsync.run(target_dir, "#{user}@#{host}:~/", RSYNC_COMMAND_ARGS)
