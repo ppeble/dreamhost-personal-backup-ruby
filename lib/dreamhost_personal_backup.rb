@@ -14,7 +14,7 @@ module DreamhostPersonalBackup
     configurator = DreamhostPersonalBackup::Configurator.new
     configurator.process_config_file(config_file)
 
-    DreamhostPersonalBackup.logger.new(configurator)
+    DreamhostPersonalBackup.instantiate_logger(configurator)
 
     DreamhostPersonalBackup.logger.info("")
     DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")

@@ -3,6 +3,10 @@ require 'singleton'
 
 module DreamhostPersonalBackup
 
+  def self.instantiate_logger(configurator)
+    DreamhostPersonalBackup::BackupLogger.instance.set_parameters(configurator)
+  end
+
   def self.logger
     DreamhostPersonalBackup::BackupLogger.instance.get
   end
@@ -10,7 +14,7 @@ module DreamhostPersonalBackup
   class BackupLogger
     include Singleton
 
-    def initialize(configurator)
+    def set_parameters(configurator)
       logfile = File.expand_path(configurator.get_parameter(:logfile)) unless configurator.get_parameter(:logfile).nil?
 
       logfile = STDOUT if logfile.nil?
