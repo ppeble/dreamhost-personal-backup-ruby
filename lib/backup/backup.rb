@@ -1,4 +1,5 @@
 require 'rsync'
+require 'backup/backup_logger'
 
 module DreamhostPersonalBackup
 
@@ -7,47 +8,45 @@ module DreamhostPersonalBackup
   module Backup
     RSYNC_COMMAND_ARGS = ['-e ssh', '-avzP', '--delete']
 
-    def self.run_for_target_directory(target_dir, config_parameters)
-      check_for_required_parameters(config_parameters)
+    def self.run_for_target_directory(target_dir, configurator)
+      check_for_required_parameters(configurator)
 
-      user = config_parameters[:user]
-      host = config_parameters[:host]
-      logger = config_parameters[:logger]
+      user = configurator.get_parameter(:user)
+      host = configurator.get_parameter(:host)
 
       target_dir = File.expand_path(target_dir)
 
-      logger.info("  Running backup for target directory: #{target_dir}")
+      DreamhostPersonalBackup.logger.info("  Running backup for target directory: #{target_dir}")
 
       rsync_result = Rsync.run(target_dir, "#{user}@#{host}:~/", RSYNC_COMMAND_ARGS)
 
-      log_rsync_result(rsync_result, logger)
+      log_rsync_result(rsync_result)
 
       rsync_result.success?
     end
 
     private
 
-    def self.check_for_required_parameters(config_parameters)
-      raise MissingConfigParameterError if config_parameters[:user].nil?
-      raise MissingConfigParameterError if config_parameters[:host].nil?
-      raise MissingConfigParameterError if config_parameters[:logger].nil?
+    def self.check_for_required_parameters(configurator)
+      raise MissingConfigParameterError if configurator.get_parameter(:user).nil?
+      raise MissingConfigParameterError if configurator.get_parameter(:host).nil?
     end
 
-    def self.log_rsync_result(rsync_result, logger)
+    def self.log_rsync_result(rsync_result)
       if rsync_result.success?
         if rsync_result.changes.count > 0
-          logger.info("  Results:")
+          DreamhostPersonalBackup.logger.info("  Results:")
 
           rsync_result.changes.each do |change|
-            logger.info "   #{change.summary} - #{change.filename}"
+            DreamhostPersonalBackup.logger.info("   #{change.summary} - #{change.filename}")
           end
         else
-          logger.info("   No changes took place!")
+          DreamhostPersonalBackup.logger.info("  No changes took place!")
         end
 
-        logger.info("  Backup completed successfully")
+        DreamhostPersonalBackup.logger.info("  Backup completed successfully")
       else
-        logger.error("  Backup failed, error: #{rsync_result.error}")
+        DreamhostPersonalBackup.logger.error("  Backup failed, error: #{rsync_result.error}")
       end
     end
   end

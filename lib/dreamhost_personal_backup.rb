@@ -1,6 +1,7 @@
 require 'backup/configurator'
 require 'backup/backup'
 require 'backup/status_manager'
+require 'backup/backup_logger'
 
 module DreamhostPersonalBackup
   VERSION = '0.1.0'
@@ -10,21 +11,22 @@ module DreamhostPersonalBackup
 
     DreamhostPersonalBackup::StatusManager.create_pid_file
 
-    config_parameters = DreamhostPersonalBackup::Configurator.process_config_file(config_file)
+    configurator = DreamhostPersonalBackup::Configurator.new
+    configurator.process_config_file(config_file)
 
-    logger = config_parameters[:logger]
+    DreamhostPersonalBackup.logger.new(configurator)
 
-    logger.info("")
-    logger.info("Starting new backup run at #{DateTime.now}")
+    DreamhostPersonalBackup.logger.info("")
+    DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
 
-    config_parameters[:targets].each_value do |target|
-      logger.info("")
-      DreamhostPersonalBackup::Backup.run_for_target_directory(target, config_parameters)
+    configurator.get_parameter(:targets).each_value do |target|
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup::Backup.run_for_target_directory(target, configurator)
     end
 
     DreamhostPersonalBackup::StatusManager.remove_pid_file
 
-    logger.info("Backup run completed at #{DateTime.now}")
+    DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
   end
 
 end
