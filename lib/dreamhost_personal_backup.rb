@@ -2,6 +2,7 @@ require 'backup/configurator'
 require 'backup/backup'
 require 'backup/status_manager'
 require 'backup/backup_logger'
+require 'backup/api_manager'
 
 module DreamhostPersonalBackup
   VERSION = '0.1.0'
@@ -22,6 +23,8 @@ module DreamhostPersonalBackup
     configurator.get_parameter(:targets).each_value do |target|
       DreamhostPersonalBackup::Backup.run_for_target_directory(target, configurator)
     end
+
+    DreamhostPersonalBackup::ApiManager.check_usage(configurator)
 
     DreamhostPersonalBackup::StatusManager.remove_pid_file
 

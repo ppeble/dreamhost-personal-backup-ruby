@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem 'rsync'
+gem 'httparty'
 
 group :test, :development do
   gem 'mocha', :require => false
