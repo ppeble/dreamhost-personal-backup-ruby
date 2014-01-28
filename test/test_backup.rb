@@ -3,6 +3,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/test_helper'
 require 'backup/backup'
 require 'backup/configurator'
 require 'backup/backup_logger'
+require 'backup/errors'
 require 'logger'
 
 class BackupTests < Test::Unit::TestCase
@@ -34,7 +35,7 @@ class BackupTests < Test::Unit::TestCase
   def test_backup_fails_if_user_is_missing
     set_expected_config_value(:user, nil)
 
-    assert_raise(DreamhostPersonalBackup::MissingConfigParameterError) {
+    assert_raise(DreamhostPersonalBackup::RequiredParameterNotFoundError) {
       DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
     }
   end
@@ -42,7 +43,7 @@ class BackupTests < Test::Unit::TestCase
   def test_backup_fails_if_host_is_missing
     set_expected_config_value(:host, nil)
 
-    assert_raise(DreamhostPersonalBackup::MissingConfigParameterError) {
+    assert_raise(DreamhostPersonalBackup::RequiredParameterNotFoundError) {
       DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
     }
   end

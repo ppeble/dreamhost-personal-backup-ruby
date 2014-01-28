@@ -3,8 +3,6 @@ require 'backup/backup_logger'
 
 module DreamhostPersonalBackup
 
-  class MissingConfigParameterError < StandardError; end
-
   module Backup
     RSYNC_COMMAND_ARGS = ['-e ssh', '-avzP', '--delete']
 
@@ -29,8 +27,8 @@ module DreamhostPersonalBackup
     private
 
     def self.check_for_required_parameters(configurator)
-      raise MissingConfigParameterError if configurator.get_parameter(:user).nil?
-      raise MissingConfigParameterError if configurator.get_parameter(:host).nil?
+      raise DreamhostPersonalBackup::RequiredParameterNotFoundError if configurator.get_parameter(:user).nil?
+      raise DreamhostPersonalBackup::RequiredParameterNotFoundError if configurator.get_parameter(:host).nil?
     end
 
     def self.log_rsync_result(rsync_result)
