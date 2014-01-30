@@ -6,7 +6,15 @@ module DreamhostPersonalBackup
   class InvalidConfigParameterError < StandardError; end
 
   class Configurator
-    VALID_CONFIG_PARAMETERS = [:user, :host, :logfile, :targets, :notifyemail, :logrotationsizeinbytes, :logkeepcount, :api_key]
+    VALID_CONFIG_PARAMETERS = [:user,
+                               :host,
+                               :logfile,
+                               :targets,
+                               :notifyemail,
+                               :logrotationsizeinbytes,
+                               :logkeepcount,
+                               :api_key,
+                               :stop_on_usage_warning].freeze
 
     DEFAULT_CONFIG_FILE = '~/.dreamhost_personal_backup/default_config.yml'
     DEFAULT_LOG_SIZE = 105000000
