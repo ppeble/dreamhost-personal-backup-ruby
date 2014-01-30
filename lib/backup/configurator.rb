@@ -14,7 +14,7 @@ module DreamhostPersonalBackup
                                :logrotationsizeinbytes,
                                :logkeepcount,
                                :api_key,
-                               :stop_on_usage_warning].freeze
+                               :stoponusagewarning].freeze
 
     DEFAULT_CONFIG_FILE = '~/.dreamhost_personal_backup/default_config.yml'
     DEFAULT_LOG_SIZE = 105000000
