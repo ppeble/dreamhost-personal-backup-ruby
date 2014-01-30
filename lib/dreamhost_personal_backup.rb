@@ -8,7 +8,7 @@ module DreamhostPersonalBackup
   VERSION = '0.1.0'
 
   def self.perform_backup(config_file)
-    return if DreamhostPersonalBackup::StatusManager.is_backup_running?
+    exit if DreamhostPersonalBackup::StatusManager.is_backup_running?
 
     DreamhostPersonalBackup::StatusManager.create_pid_file
 
@@ -20,16 +20,40 @@ module DreamhostPersonalBackup
     DreamhostPersonalBackup.logger.info("")
     DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
 
+    #FIXME Is this the best way to do this?
+    at_exit {
+      DreamhostPersonalBackup::StatusManager.remove_pid_file
+
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
+    }
+
+    #FIXME This should probably be in its own method
+    if DreamhostPersonalBackup::ApiManager.exceeds_usage_limit?(configurator) && configurator.get_parameter(:stoponusagewarning)
+      usage_before_backup_in_mb = DreamhostPersonalBackup::ApiManager.get_current_usage(configurator)
+
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.warn("  You have met or exceeded the usage limit allowed by Dreamhost. Current usage (mb): #{usage_before_backup_in_mb}")
+      DreamhostPersonalBackup.logger.error('  You have specified that you wish to stop the backup on a usage warning, shutting down without making any changes.')
+      exit
+
+      #FIXME Send notification email if email parameter is present
+    end
+
     configurator.get_parameter(:targets).each_value do |target|
       DreamhostPersonalBackup::Backup.run_for_target_directory(target, configurator)
     end
 
-    DreamhostPersonalBackup::ApiManager.check_usage(configurator)
+    #FIXME This should probably be in its own method
+    if DreamhostPersonalBackup::ApiManager.near_usage_limit?(configurator) || DreamhostPersonalBackup::ApiManager.exceeds_usage_limit?(configurator)
+      usage_after_backup_in_mb = DreamhostPersonalBackup::ApiManager.get_current_usage(configurator)
 
-    DreamhostPersonalBackup::StatusManager.remove_pid_file
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.warn("  You are at or near the usage limit allowed by Dreamhost. If you exceed the limit you will be charged by Dreamhost for additional usage. Current usage (mb): #{usage_after_backup_in_mb}")
 
-    DreamhostPersonalBackup.logger.info("")
-    DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
+      #FIXME Send warning email if the email parameter is present
+    end
+
   end
 
 end

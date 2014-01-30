@@ -2,37 +2,47 @@ require 'httparty'
 
 module DreamhostPersonalBackup
 
+  class UsageDataNotFoundError < StandardError; end
+
   module ApiManager
 
     API_ROOT = 'https://api.dreamhost.com/?format=json'
     SIZE_LIMIT_IN_MB = 51200  # This is the value stated on the DH wiki: http://wiki.dreamhost.com/Personal_Backup
 
-    def self.check_usage(configurator)
+    def self.get_current_usage(configurator)
       return if configurator.get_parameter(:api_key).nil?
 
       api_url = build_api_url('user-list_users', configurator.get_parameter(:api_key))
       response = HTTParty.get(api_url)
       response_json = JSON.parse(response.body)
 
-      DreamhostPersonalBackup.logger.info("")
-
       if response_json["result"] != "success"
-        DreamhostPersonalBackup.logger.warn("response: #{response_json.inspect}")
-        DreamhostPersonalBackup.logger.warn("API call to determine current usage failed, details: #{determine_error_message(response_json)}")
-        return
+        raise DreamhostPersonalBackup::UsageDataNotFoundError, "API call to determine current usage failed, details: #{determine_error_message(response_json)}"
       end
 
-      current_usage_in_mb = find_usage_data(response_json, configurator.get_parameter(:user))
+      current_usage_in_mb = find_usage_data_in_response(response_json, configurator.get_parameter(:user))
 
       if current_usage_in_mb.nil?
-        DreamhostPersonalBackup.logger.warn("Unable to find usage data for user #{configurator.get_parameter(:user)}!")
-        return
+        raise DreamhostPersonalBackup::UsageDataNotFoundError, "Unable to find usage data for user #{configurator.get_parameter(:user)}!"
       end
 
-      if current_usage_in_mb >= SIZE_LIMIT_IN_MB
-        DreamhostPersonalBackup.logger.warn("You have exceeded the free storage limit of #{SIZE_LIMIT_IN_MB} MB, current usage: #{current_usage_in_mb} MB")
-        #FIXME add email notification logic
-      end
+      current_usage_in_mb
+    end
+
+    def self.exceeds_usage_limit?(configurator)
+      return false if configurator.get_parameter(:api_key).nil?
+
+      current_usage_in_mb = get_current_usage(configurator)
+
+      current_usage_in_mb >= SIZE_LIMIT_IN_MB
+    end
+
+    def self.near_usage_limit?(configurator)
+      return false if configurator.get_parameter(:api_key).nil?
+
+      current_usage_in_mb =  get_current_usage(configurator)
+
+      current_usage_in_mb >= (SIZE_LIMIT_IN_MB * 0.90)
     end
 
     private
@@ -41,7 +51,9 @@ module DreamhostPersonalBackup
       API_ROOT + "&cmd=#{api_command}&key=#{api_key}"
     end
 
-    def self.find_usage_data(response, username)
+    def self.find_usage_data_in_response(response, username)
+      return unless response.has_key?("data")
+
       current_usage_in_mb = nil
 
       response["data"].each do |entry|
