@@ -69,9 +69,4 @@ class BackupTests < Test::Unit::TestCase
     Logger.any_instance.expects(:info).at_least(0).returns(nil)
     Logger.any_instance.expects(:error).at_least(0).returns(nil)
   end
-
-  def set_expected_config_value(parameter, value)
-    DreamhostPersonalBackup::Configurator.any_instance.expects(:get_parameter).with(parameter).at_least(0).returns(value)
-  end
-
 end
