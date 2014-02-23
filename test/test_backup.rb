@@ -4,6 +4,7 @@ require 'backup/backup'
 require 'backup/configurator'
 require 'backup/backup_logger'
 require 'backup/errors'
+require 'backup/backup_result_printer'
 require 'logger'
 
 class BackupTests < Test::Unit::TestCase
@@ -22,30 +23,43 @@ class BackupTests < Test::Unit::TestCase
     suppress_logging_messages
   end
 
-  def test_backup_is_performed_without_errors_with_updated_file
+  def test_backup_run_is_performed_without_errors_with_updated_file
     set_expected_rsync_result_as(true)
-    assert DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
+
+    backup = DreamhostPersonalBackup::Backup.new(SOURCE_DIR_PARAMETER, @configurator)
+
+    assert backup.run
   end
 
-  def test_backup_returns_failure_if_rsync_reports_an_error
+  def test_backup_run_returns_false_if_rsync_reports_an_error
     set_expected_rsync_result_as(false)
-    assert_equal false, DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
+
+    backup = DreamhostPersonalBackup::Backup.new(SOURCE_DIR_PARAMETER, @configurator)
+
+    assert_equal false, backup.run
   end
 
-  def test_backup_fails_if_user_is_missing
+  def test_backup_initialize_raises_missing_parameter_error_if_user_is_missing
     set_expected_config_value(:user, nil)
 
     assert_raise(DreamhostPersonalBackup::RequiredParameterNotFoundError) {
-      DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
+      DreamhostPersonalBackup::Backup.new(SOURCE_DIR_PARAMETER, @configurator)
     }
   end
 
-  def test_backup_fails_if_host_is_missing
+  def test_backup_initialize_raises_missing_parameter_error_if_host_is_missing
     set_expected_config_value(:host, nil)
 
     assert_raise(DreamhostPersonalBackup::RequiredParameterNotFoundError) {
-      DreamhostPersonalBackup::Backup.run_for_target_directory(SOURCE_DIR_PARAMETER, @configurator)
+      DreamhostPersonalBackup::Backup.new(SOURCE_DIR_PARAMETER, @configurator)
     }
+  end
+
+  def test_print_results_calls_default_printer_if_no_parameter_are_passed
+    DreamhostPersonalBackup::BackupResultPrinter.any_instance.expects(:print).returns(nil)
+
+    backup = DreamhostPersonalBackup::Backup.new(SOURCE_DIR_PARAMETER, @configurator)
+    backup.print_results
   end
 
   private

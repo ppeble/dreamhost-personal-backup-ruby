@@ -40,9 +40,8 @@ module DreamhostPersonalBackup
       #FIXME Send notification email if email parameter is present
     end
 
-    configurator.get_parameter(:targets).each_value do |target|
-      DreamhostPersonalBackup::Backup.run_for_target_directory(target, configurator)
-    end
+    backups = create_backups(configurator)
+    run(backups)
 
     #FIXME This should probably be in its own method
     if DreamhostPersonalBackup::ApiManager.near_usage_limit?(configurator) || DreamhostPersonalBackup::ApiManager.exceeds_usage_limit?(configurator)
@@ -54,6 +53,26 @@ module DreamhostPersonalBackup
       #FIXME Send warning email if the email parameter is present
     end
 
+  end
+
+  private
+
+  def create_backups(configurator)
+    backups = Array.new
+
+    configurator.get_parameter(:targets).each_value do |target|
+      backups << DreamhostPersonalBackup::Backup.new(target, configurator)
+    end
+  end
+
+  def run(backups)
+    backups.each do |backup|
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.info("  Running backup for target directory: #{backup.target_directory}")
+
+      backup.run
+      backup.print_results
+    end
   end
 
 end
