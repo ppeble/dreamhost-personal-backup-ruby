@@ -3,6 +3,7 @@ require 'backup/backup'
 require 'backup/status_manager'
 require 'backup/backup_logger'
 require 'backup/api_manager'
+require 'backup/backup_result_printer'
 
 module DreamhostPersonalBackup
   VERSION = '0.1.0'
@@ -57,15 +58,17 @@ module DreamhostPersonalBackup
 
   private
 
-  def create_backups(configurator)
+  def self.create_backups(configurator)
     backups = Array.new
 
     configurator.get_parameter(:targets).each_value do |target|
       backups << DreamhostPersonalBackup::Backup.new(target, configurator)
     end
+
+    backups
   end
 
-  def run(backups)
+  def self.run(backups)
     backups.each do |backup|
       DreamhostPersonalBackup.logger.info("")
       DreamhostPersonalBackup.logger.info("  Running backup for target directory: #{backup.target_directory}")
