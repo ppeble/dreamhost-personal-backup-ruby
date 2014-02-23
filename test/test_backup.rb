@@ -5,7 +5,6 @@ require 'backup/configurator'
 require 'backup/backup_logger'
 require 'backup/errors'
 require 'backup/backup_result_printer'
-require 'logger'
 
 class BackupTests < Test::Unit::TestCase
 
@@ -19,8 +18,6 @@ class BackupTests < Test::Unit::TestCase
 
     set_expected_config_value(:user, CONFIG_PARAMETERS[:user])
     set_expected_config_value(:host, CONFIG_PARAMETERS[:host])
-
-    suppress_logging_messages
   end
 
   def test_backup_run_is_performed_without_errors_with_updated_file
@@ -77,10 +74,5 @@ class BackupTests < Test::Unit::TestCase
                              DreamhostPersonalBackup::Backup::RSYNC_COMMAND_ARGS).returns(rsync_return_code)
   end
 
-  def suppress_logging_messages
-    DreamhostPersonalBackup.expects(:logger).at_least(0).returns(Logger.new(STDOUT))
 
-    Logger.any_instance.expects(:info).at_least(0).returns(nil)
-    Logger.any_instance.expects(:error).at_least(0).returns(nil)
-  end
 end
