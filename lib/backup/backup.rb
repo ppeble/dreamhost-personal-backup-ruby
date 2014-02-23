@@ -20,8 +20,8 @@ module DreamhostPersonalBackup
       @rsync_result.success?
     end
 
-    def print_results(printer = DreamhostPersonalBackup::BackupResultPrinter)
-      printer.new.print(@rsync_result)
+    def generate_result_report(reporter = DreamhostPersonalBackup::BackupResultReport)
+      reporter.new.generate_for(@rsync_result)
     end
 
   end

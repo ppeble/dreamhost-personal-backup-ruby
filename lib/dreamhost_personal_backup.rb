@@ -3,7 +3,7 @@ require 'backup/backup'
 require 'backup/status_manager'
 require 'backup/backup_logger'
 require 'backup/api_manager'
-require 'backup/backup_result_printer'
+require 'backup/backup_result_report'
 
 module DreamhostPersonalBackup
   VERSION = '0.1.0'
@@ -74,7 +74,9 @@ module DreamhostPersonalBackup
       DreamhostPersonalBackup.logger.info("  Running backup for target directory: #{backup.target_directory}")
 
       backup.run
-      backup.print_results
+      result_report = backup.generate_result_report
+
+      DreamhostPersonalBackup.logger.info(result_report)
     end
   end
 
