@@ -24,7 +24,7 @@ module DreamhostPersonalBackup
       @config_parameters = Hash.new
     end
 
-    def process_config_file(config_file_path)
+    def load_config_file(config_file_path)
       config_file_path ||= DEFAULT_CONFIG_FILE
       config_file = File.expand_path(config_file_path)
 

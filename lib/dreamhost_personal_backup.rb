@@ -10,7 +10,7 @@ module DreamhostPersonalBackup
 
   def self.perform_backup(config_file)
     configurator = DreamhostPersonalBackup::Configurator.new
-    configurator.process_config_file(config_file)
+    configurator.load_config_file(config_file)
 
     DreamhostPersonalBackup.instantiate_logger(configurator)
 
