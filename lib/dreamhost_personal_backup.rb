@@ -25,9 +25,9 @@ module DreamhostPersonalBackup
     if DreamhostPersonalBackup::ApiManager.exceeds_usage_limit?(configurator) && configurator.get_parameter(:stoponusagewarning)
       usage_before_backup_in_mb = DreamhostPersonalBackup::ApiManager.get_current_usage(configurator)
 
-      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.warn("")
       DreamhostPersonalBackup.logger.warn("  You have met or exceeded the usage limit allowed by Dreamhost. Current usage (mb): #{usage_before_backup_in_mb}")
-      DreamhostPersonalBackup.logger.error('  You have specified that you wish to stop the backup on a usage warning, shutting down without making any changes.')
+      DreamhostPersonalBackup.logger.warn('  You have specified that you wish to stop the backup on a usage warning, shutting down without making any changes.')
       exit
 
       #FIXME Send notification email if email parameter is present
