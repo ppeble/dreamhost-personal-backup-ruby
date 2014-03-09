@@ -18,11 +18,21 @@ module DreamhostPersonalBackup
       end
     end
 
-    def self.create_pid_file
+    def self.begin_run
       File.open(File.expand_path(PID_FILE), "w") { |f| f.write(Process.pid) }
+
+      DreamhostPersonalBackup.logger.info("")
+      DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
+
+      at_exit {
+        end_run
+
+        DreamhostPersonalBackup.logger.info("")
+        DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
+      }
     end
 
-    def self.remove_pid_file
+    def self.end_run
       pid_file = File.expand_path(PID_FILE)
       File.delete(pid_file) if File.file?(pid_file)
     end

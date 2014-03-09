@@ -19,18 +19,7 @@ module DreamhostPersonalBackup
       exit
     end
 
-    DreamhostPersonalBackup::StatusManager.create_pid_file
-
-    DreamhostPersonalBackup.logger.info("")
-    DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
-
-    #FIXME Is this the best way to do this?
-    at_exit {
-      DreamhostPersonalBackup::StatusManager.remove_pid_file
-
-      DreamhostPersonalBackup.logger.info("")
-      DreamhostPersonalBackup.logger.info("Backup run completed at #{DateTime.now}")
-    }
+    DreamhostPersonalBackup::StatusManager.begin_run
 
     #FIXME This should probably be in its own method
     if DreamhostPersonalBackup::ApiManager.exceeds_usage_limit?(configurator) && configurator.get_parameter(:stoponusagewarning)
