@@ -9,14 +9,17 @@ module DreamhostPersonalBackup
   VERSION = '0.1.0'
 
   def self.perform_backup(config_file)
-    exit if DreamhostPersonalBackup::StatusManager.is_backup_running?
-
-    DreamhostPersonalBackup::StatusManager.create_pid_file
-
     configurator = DreamhostPersonalBackup::Configurator.new
     configurator.process_config_file(config_file)
 
     DreamhostPersonalBackup.instantiate_logger(configurator)
+
+    if DreamhostPersonalBackup::StatusManager.is_backup_running?
+      DreamhostPersonalBackup.logger.info("Backup is already running! Exiting ...")
+      exit
+    end
+
+    DreamhostPersonalBackup::StatusManager.create_pid_file
 
     DreamhostPersonalBackup.logger.info("")
     DreamhostPersonalBackup.logger.info("Starting new backup run at #{DateTime.now}")
