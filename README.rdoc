@@ -1,7 +1,10 @@
-= Dreamhost Personal Backup Gem
+= Dreamhost Personal Backup Gem - No longer supported (not like it ever really was, I guess!)
 
-THIS IS A WORK IN PROGRESS. FEATURES MAY NOT WORK AND DOCUMENTATION MAY NOT BE ACCURATE.
-PLEASE DO NOT USE YET FOR BACKUPS.
+Dreamhost has decided to discontinue the backup service that this gem relied upon. Instead they have said that we could instead
+use DreamObjects[https://www.dreamhost.com/cloud/storage/] for backup storage.
+
+This gem was really just a learning experience anyway. I'm going to take the opportunity to learn more about Go and S3/Swift (which
+DreamObjects uses for their API) and write something that will perform backup syncs like this gem attempted to do.
 
 {<img src="https://travis-ci.org/ptrimble/dreamhost-personal-backup.png" />}[https://travis-ci.org/ptrimble/dreamhost-personal-backup] {<img src="https://coveralls.io/repos/ptrimble/dreamhost-personal-backup/badge.png?branch=master" />}[https://coveralls.io/r/ptrimble/dreamhost-personal-backup]
 
